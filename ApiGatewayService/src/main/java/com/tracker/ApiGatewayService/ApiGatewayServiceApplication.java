@@ -33,6 +33,9 @@ public class ApiGatewayServiceApplication {
 				.route("GoalsService", r -> r.path("/api/goals/**")
 						.filters(f -> f.filter(jwtAuthFilter.apply(new JwtAuthGatewayFilter.Config())))
 						.uri("http://localhost:8083"))
+				.route("AIService", r -> r.path("/api/ai/**")
+						.filters(f -> f.filter(jwtAuthFilter.apply(new JwtAuthGatewayFilter.Config())))
+						.uri("http://localhost:8084"))
 				.build();
 	}
 }
