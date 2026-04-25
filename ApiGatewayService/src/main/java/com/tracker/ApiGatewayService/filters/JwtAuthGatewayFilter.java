@@ -3,6 +3,7 @@ package com.tracker.ApiGatewayService.filters;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
@@ -14,7 +15,8 @@ import javax.crypto.SecretKey;
 @Component
 public class JwtAuthGatewayFilter extends AbstractGatewayFilterFactory<JwtAuthGatewayFilter.Config> {
 
-    private static final String SECRET_KEY = "rvbirbwivbiwbvwisvksvsevekvrbrierv";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     public JwtAuthGatewayFilter() {
         super(Config.class);
@@ -36,7 +38,7 @@ public class JwtAuthGatewayFilter extends AbstractGatewayFilterFactory<JwtAuthGa
             String jwtToken = authHeader.substring(7);
 
             try {
-                SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+                SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
                 Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwtToken).getBody();
 
                 String email = claims.get("email", String.class);
