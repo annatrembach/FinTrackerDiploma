@@ -1,7 +1,7 @@
 package com.tracker.AIService.services;
 
 import com.tracker.AIService.config.JwtUtil;
-import com.tracker.AIService.dto.UserContext;
+import com.tracker.AIService.dto.AuthContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
@@ -17,8 +17,8 @@ public class AiChatService {
 
         Long userId = jwtUtil.extractUserId(token);
 
-        UserContext.setUserId(userId);
-        UserContext.setToken(token);
+        AuthContext.setUserId(userId);
+        AuthContext.setToken(token);
 
         return chatClient.prompt()
                 .system("""

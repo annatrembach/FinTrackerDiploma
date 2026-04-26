@@ -1,7 +1,7 @@
 package com.tracker.AIService.tools;
 
 import com.tracker.AIService.client.UserClient;
-import com.tracker.AIService.dto.UserContext;
+import com.tracker.AIService.dto.AuthContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class UserTools {
             """)
     public String getMyProfile() {
         return userClient.getUserProfile(
-                UserContext.getToken()
+                AuthContext.getToken()
         );
     }
 }

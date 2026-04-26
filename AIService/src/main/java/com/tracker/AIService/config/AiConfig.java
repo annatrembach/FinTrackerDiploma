@@ -1,6 +1,9 @@
 package com.tracker.AIService.config;
 
-import com.tracker.AIService.tools.GoalTools;
+import com.tracker.AIService.tools.Goals.GoalCreateTools;
+import com.tracker.AIService.tools.Goals.GoalDeleteTools;
+import com.tracker.AIService.tools.Goals.GoalQueryTools;
+import com.tracker.AIService.tools.Goals.GoalUpdateTools;
 import com.tracker.AIService.tools.TransactionTools;
 import com.tracker.AIService.tools.UserTools;
 import org.springframework.ai.chat.client.ChatClient;
@@ -14,10 +17,13 @@ public class AiConfig {
     @Bean
     public ChatClient chatClient(ChatModel chatModel,
                                  TransactionTools transactionTools,
-                                 GoalTools goalTools,
+                                 GoalCreateTools goalCreateTools,
+                                 GoalDeleteTools goalDeleteTools,
+                                 GoalUpdateTools goalUpdateTools,
+                                 GoalQueryTools goalQueryTools,
                                  UserTools userTools) {
         return ChatClient.builder(chatModel)
-                .defaultTools(transactionTools, goalTools, userTools)
+                .defaultTools(transactionTools, goalCreateTools, goalDeleteTools, goalUpdateTools, goalQueryTools, userTools)
                 .build();
     }
 }

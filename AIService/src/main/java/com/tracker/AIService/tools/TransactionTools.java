@@ -1,7 +1,7 @@
 package com.tracker.AIService.tools;
 
 import com.tracker.AIService.client.TransactionClient;
-import com.tracker.AIService.dto.UserContext;
+import com.tracker.AIService.dto.AuthContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
@@ -19,8 +19,8 @@ public class TransactionTools {
         """)
     public String getBalance() {
         return transactionClient.getBalance(
-                UserContext.getUserId(),
-                UserContext.getToken()
+                AuthContext.getUserId(),
+                AuthContext.getToken()
         );
     }
 
@@ -31,8 +31,8 @@ public class TransactionTools {
         """)
     public String getMonthlySummary() {
         return transactionClient.getMonthlySummary(
-                UserContext.getUserId(),
-                UserContext.getToken()
+                AuthContext.getUserId(),
+                AuthContext.getToken()
         );
     }
 
@@ -43,8 +43,8 @@ public class TransactionTools {
         """)
     public String getUserTransactions() {
         return transactionClient.getUserTransactions(
-                UserContext.getUserId(),
-                UserContext.getToken()
+                AuthContext.getUserId(),
+                AuthContext.getToken()
         );
     }
 
@@ -59,7 +59,7 @@ public class TransactionTools {
                 type,
                 category,
                 sortBy,
-                UserContext.getToken()
+                AuthContext.getToken()
         );
     }
 
@@ -73,7 +73,7 @@ public class TransactionTools {
     public String createTransaction(String transactionJson) {
         return transactionClient.createTransaction(
                 transactionJson,
-                UserContext.getToken()
+                AuthContext.getToken()
         );
     }
 }

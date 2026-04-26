@@ -1,5 +1,6 @@
 package com.tracker.GoalService.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tracker.GoalService.models.enums.Status;
 import jakarta.persistence.*;
 
@@ -24,6 +25,7 @@ public class Goal  implements Serializable {
 
     private String deadline;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "createdAt")
     private LocalDateTime creationDate;
 

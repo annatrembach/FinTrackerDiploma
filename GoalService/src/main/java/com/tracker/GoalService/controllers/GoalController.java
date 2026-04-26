@@ -25,7 +25,9 @@ public class GoalController {
     private UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<Goal> createGoal(@RequestBody Goal goal) throws Exception {
+    public ResponseEntity<Goal> createGoal(@RequestBody Goal goal,
+            @RequestHeader(value = "Authorization", required = false) String jwt
+    ) throws Exception {
         Goal createdGoal = goalService.createGoal(goal);
         return new ResponseEntity<>(createdGoal, HttpStatus.CREATED);
     }

@@ -18,12 +18,21 @@ public class GoalClient {
         headers.set("Authorization", token);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return restTemplate.exchange(
-                BASE_URL + "/create",
-                HttpMethod.POST,
-                new HttpEntity<>(goalJson, headers),
-                String.class
-        ).getBody();
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    BASE_URL + "/create",
+                    HttpMethod.POST,
+                    new HttpEntity<>(goalJson, headers),
+                    String.class
+            );
+
+            return response.getBody();
+
+        } catch (Exception e) {
+            System.out.println("GoalClient ERROR: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public String getGoalById(Long goalId, String token) {
@@ -76,24 +85,42 @@ public class GoalClient {
         headers.set("Authorization", token);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return restTemplate.exchange(
-                BASE_URL + "/update/" + goalId,
-                HttpMethod.PUT,
-                new HttpEntity<>(goalJson, headers),
-                String.class
-        ).getBody();
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    BASE_URL + "/update/" + goalId,
+                    HttpMethod.PUT,
+                    new HttpEntity<>(goalJson, headers),
+                    String.class
+            );
+
+            return response.getBody();
+
+        } catch (Exception e) {
+            System.out.println("GoalClient UPDATE ERROR: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public String deleteGoal(Long goalId, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
 
-        return restTemplate.exchange(
-                BASE_URL + "/delete/" + goalId,
-                HttpMethod.DELETE,
-                new HttpEntity<>(headers),
-                String.class
-        ).getBody();
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    BASE_URL + "/delete/" + goalId,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(headers),
+                    String.class
+            );
+
+            return response.getBody() != null ? response.getBody() : "DELETED";
+
+        } catch (Exception e) {
+            System.out.println("GoalClient DELETE ERROR: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public String completeGoal(Long goalId, String token) {

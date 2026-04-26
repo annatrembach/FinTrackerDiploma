@@ -14,9 +14,12 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtProvider jwtProvider;
+
     @Override
     public User getUserProfile(String jwt) {
-        String email = JwtProvider.getEmailFromJwtToken(jwt);
+        String email = jwtProvider.getEmailFromJwtToken(jwt);
         return userRepository.findByEmail(email);
     }
 

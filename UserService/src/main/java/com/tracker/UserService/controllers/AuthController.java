@@ -32,6 +32,8 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private CustomerUserServiceImpl customerUserDetails;
+    @Autowired
+    private JwtProvider jwtProvider;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUser(
@@ -58,7 +60,7 @@ public class AuthController {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = JwtProvider.generateToken(authentication, savedUser.getId());
+        String token = jwtProvider.generateToken(authentication, savedUser.getId());
 
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(token);
@@ -75,7 +77,7 @@ public class AuthController {
         Authentication authentication = authenticate(username, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = JwtProvider.generateToken(authentication, userRepository.findByEmail(username).getId());
+        String token = jwtProvider.generateToken(authentication, userRepository.findByEmail(username).getId());
 
         User user = userRepository.findByEmail(username);
 
