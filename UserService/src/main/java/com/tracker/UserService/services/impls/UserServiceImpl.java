@@ -1,15 +1,16 @@
-package com.tracker.UserService.services;
+package com.tracker.UserService.services.impls;
 
 import com.tracker.UserService.config.JwtProvider;
 import com.tracker.UserService.models.User;
 import com.tracker.UserService.repository.UserRepository;
+import com.tracker.UserService.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;

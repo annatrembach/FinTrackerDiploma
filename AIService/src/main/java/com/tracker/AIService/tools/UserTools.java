@@ -1,7 +1,7 @@
 package com.tracker.AIService.tools;
 
 import com.tracker.AIService.client.UserClient;
-import com.tracker.AIService.dto.AuthContext;
+import com.tracker.AIService.util.AuthContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;

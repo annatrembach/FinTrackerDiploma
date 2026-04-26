@@ -1,8 +1,9 @@
-package com.tracker.GoalService.services;
+package com.tracker.GoalService.services.impls;
 
 import com.tracker.GoalService.models.Goal;
 import com.tracker.GoalService.models.enums.Status;
 import com.tracker.GoalService.repository.GoalRepository;
+import com.tracker.GoalService.services.GoalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.tracker.AIService.dto;
+package com.tracker.AIService.models.dto;
 
 import lombok.Data;
 

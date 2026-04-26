@@ -47,22 +47,6 @@ public class GoalClient {
         ).getBody();
     }
 
-    public String getAllGoals(String status, String token) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", token);
-
-        String url = UriComponentsBuilder.fromUriString(BASE_URL + "/")
-                .queryParamIfPresent("goalStatus", java.util.Optional.ofNullable(status))
-                .toUriString();
-
-        return restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                new HttpEntity<>(headers),
-                String.class
-        ).getBody();
-    }
-
     public String getUserGoals(Long userId, String status, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);

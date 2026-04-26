@@ -5,7 +5,7 @@ import com.tracker.UserService.models.User;
 import com.tracker.UserService.repository.UserRepository;
 import com.tracker.UserService.requests.LoginRequest;
 import com.tracker.UserService.responses.AuthResponse;
-import com.tracker.UserService.services.CustomerUserServiceImpl;
+import com.tracker.UserService.services.impls.CustomerUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

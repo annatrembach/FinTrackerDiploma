@@ -1,7 +1,7 @@
 package com.tracker.AIService.controllers;
 
-import com.tracker.AIService.dto.ChatRequest;
-import com.tracker.AIService.services.AiChatService;
+import com.tracker.AIService.models.dto.ChatRequest;
+import com.tracker.AIService.services.impls.AiChatServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ChatController {
 
-    private final AiChatService aiChatService;
+    private final AiChatServiceImpl aiChatServiceImpl;
 
     @PostMapping("/chat")
     public String chat(@RequestBody ChatRequest request,
                        @RequestHeader("Authorization") String token) {
-        return aiChatService.chat(request.getMessage(), token);
+        return aiChatServiceImpl.chat(request.getMessage(), token);
     }
 }

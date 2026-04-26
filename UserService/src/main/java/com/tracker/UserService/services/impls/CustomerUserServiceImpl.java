@@ -1,4 +1,4 @@
-package com.tracker.UserService.services;
+package com.tracker.UserService.services.impls;
 
 import com.tracker.UserService.models.User;
 import com.tracker.UserService.repository.UserRepository;

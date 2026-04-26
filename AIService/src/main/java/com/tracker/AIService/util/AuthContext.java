@@ -1,4 +1,4 @@
-package com.tracker.AIService.dto;
+package com.tracker.AIService.util;
 
 import java.util.HashMap;
 import java.util.Map;

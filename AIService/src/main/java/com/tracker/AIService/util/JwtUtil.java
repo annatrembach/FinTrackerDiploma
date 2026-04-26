@@ -1,4 +1,4 @@
-package com.tracker.AIService.config;
+package com.tracker.AIService.util;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

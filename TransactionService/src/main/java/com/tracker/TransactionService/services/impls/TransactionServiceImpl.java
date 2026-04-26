@@ -1,10 +1,11 @@
-package com.tracker.TransactionService.services;
+package com.tracker.TransactionService.services.impls;
 
 import com.tracker.TransactionService.models.DTO.MonthSummaryDTO;
 import com.tracker.TransactionService.models.Transaction;
 import com.tracker.TransactionService.models.DTO.UserBalanceDTO;
 import com.tracker.TransactionService.models.enums.Type;
 import com.tracker.TransactionService.repository.TransactionRepository;
+import com.tracker.TransactionService.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class TransactionServiceImpl implements TransactionService{
+public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;

@@ -1,9 +1,9 @@
 package com.tracker.AIService.config;
 
-import com.tracker.AIService.tools.Goals.GoalCreateTools;
-import com.tracker.AIService.tools.Goals.GoalDeleteTools;
-import com.tracker.AIService.tools.Goals.GoalQueryTools;
-import com.tracker.AIService.tools.Goals.GoalUpdateTools;
+import com.tracker.AIService.tools.goal.GoalCreateTools;
+import com.tracker.AIService.tools.goal.GoalDeleteTools;
+import com.tracker.AIService.tools.goal.GoalQueryTools;
+import com.tracker.AIService.tools.goal.GoalUpdateTools;
 import com.tracker.AIService.tools.TransactionTools;
 import com.tracker.AIService.tools.UserTools;
 import org.springframework.ai.chat.client.ChatClient;
