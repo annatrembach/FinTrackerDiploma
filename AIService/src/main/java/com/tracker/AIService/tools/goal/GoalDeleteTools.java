@@ -2,10 +2,10 @@ package com.tracker.AIService.tools.goal;
 
 import com.tracker.AIService.client.GoalClient;
 import com.tracker.AIService.util.AuthContext;
-import com.tracker.AIService.models.dto.GoalDraftResponse;
-import com.tracker.AIService.models.dto.GoalDraft;
+import com.tracker.AIService.models.dto.goal.GoalDraftResponse;
+import com.tracker.AIService.models.dto.goal.GoalDraft;
 import com.tracker.AIService.services.GoalDraftService;
-import com.tracker.AIService.services.GoalDraftValidator;
+import com.tracker.AIService.services.DraftValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ public class GoalDeleteTools {
 
     private final GoalClient goalClient;
     private final GoalDraftService draftService;
-    private final GoalDraftValidator validator;
+    private final DraftValidator validator;
 
     @Tool(description = """
         Step 1 of 2 for goal deletion.

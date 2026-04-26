@@ -1,6 +1,6 @@
 package com.tracker.AIService.services;
 
-import com.tracker.AIService.models.dto.GoalDraft;
+import com.tracker.AIService.models.dto.goal.GoalDraft;
 
 import java.util.Optional;
 

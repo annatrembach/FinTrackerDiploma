@@ -1,6 +1,6 @@
 package com.tracker.AIService.services.impls;
 
-import com.tracker.AIService.models.dto.GoalDraft;
+import com.tracker.AIService.models.dto.goal.GoalDraft;
 import com.tracker.AIService.services.GoalDraftService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
