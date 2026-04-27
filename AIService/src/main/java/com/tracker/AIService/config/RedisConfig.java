@@ -20,7 +20,7 @@ public class RedisConfig {
     private final ObjectMapper objectMapper;
 
     @Bean
-    public RedisTemplate<String, GoalDraft> redisTemplate(
+    public RedisTemplate<String, GoalDraft> goalRedisTemplate(
             RedisConnectionFactory factory) {
 
         RedisTemplate<String, GoalDraft> template = new RedisTemplate<>();

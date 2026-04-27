@@ -1,4 +1,4 @@
-package com.tracker.AIService.tools;
+package com.tracker.AIService.tools.user;
 
 import com.tracker.AIService.client.UserClient;
 import com.tracker.AIService.util.AuthContext;
@@ -8,18 +8,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserTools {
+public class UserQueryTools {
 
     private final UserClient userClient;
 
     @Tool(description = """
-            Get current user's profile details.
-            Use when user asks: 'who am I', 'show my profile',
-            'my account info', 'my details'.
-            """)
+        Get current user profile (name, email, role).
+        Use when user asks: 'my profile', 'who am I', 'show my account', 'my info'.
+        """)
     public String getMyProfile() {
-        return userClient.getUserProfile(
-                AuthContext.getToken()
-        );
+        return userClient.getUserProfile(AuthContext.getToken());
     }
+
 }
