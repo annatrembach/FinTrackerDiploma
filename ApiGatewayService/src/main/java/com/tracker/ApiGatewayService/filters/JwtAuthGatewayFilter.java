@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
@@ -39,8 +40,9 @@ public class JwtAuthGatewayFilter extends AbstractGatewayFilterFactory<JwtAuthGa
 
             try {
                 SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
-                Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwtToken).getBody();
-
+                Claims claims = Jwts.parser()
+                        .verifyWith(key).build()
+                        .parseSignedClaims(jwtToken).getPayload();
                 String email = claims.get("email", String.class);
                 String authorities = claims.get("authorities", String.class);
 
@@ -51,6 +53,8 @@ public class JwtAuthGatewayFilter extends AbstractGatewayFilterFactory<JwtAuthGa
 
                 return chain.filter(exchange.mutate().request(modifiedRequest).build());
             } catch (Exception e) {
+                System.out.println("JWT ERROR: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
             }
         };

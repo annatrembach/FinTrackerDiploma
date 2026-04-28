@@ -11,6 +11,7 @@ import UserProfile from './pages/UserProfile/UserProfile.jsx';
 import GoalList from './pages/GoalList/GoalList.jsx';
 import TransactionList from './pages/TransactionList/TransactionList.jsx'
 import MainPage from './pages/MainPage/MainPage.jsx';
+import AIChat from './pages/AIChat/AIChat.jsx';
 
 
 function App() {
@@ -71,6 +72,15 @@ function App() {
                 <TransactionList isSidebarOpen={isSidebarOpen} />
               </>
             }
+          />
+          <Route
+          path="/chat"
+          element={
+            <>
+              <Header setIsSidebarOpen={setIsSidebarOpen} />
+              <AIChat isSidebarOpen={isSidebarOpen} />
+            </>
+          }
           />
         </Routes>
       </div>

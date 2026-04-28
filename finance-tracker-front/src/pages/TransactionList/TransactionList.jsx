@@ -7,6 +7,14 @@ const API_BASE = 'http://localhost:8082/api/transactions';
 const CATEGORY_API = 'http://localhost:8082/api/categories';
 const GOALS_API = 'http://localhost:8083/api/goals/';
 
+const formatType = (type) => {
+  const map = {
+    'INCOME': 'Income',
+    'EXPENSE': 'Expense',
+  };
+  return map[type] || type;
+  };
+
 function CustomSelectWithInput({ options, value, onChange, placeholder, readOnlyInput = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -412,7 +420,7 @@ export default function TransactionList({ isSidebarOpen }) {
             return (
               <tr key={t.id}>
                 <td>{t.amount}</td>
-                <td>{t.type}</td>
+                <td>{formatType(t.type)}</td>
                 <td>{t.description}</td>
                 <td>{t.transactionDate}</td>
                 <td>{t.category?.name || ''}</td>

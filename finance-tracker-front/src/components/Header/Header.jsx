@@ -45,18 +45,18 @@ function Header({ setIsSidebarOpen }) {
   };
 
   const pinkPages = ['/dashboard', '/goals'];
-  const turquoisePages = ['/profile', '/transactions'];
+  const turquoisePages = ['/profile', '/transactions', '/chat'];
 
   let navColorClass = '';
   if (pinkPages.includes(location.pathname)) {
     navColorClass = 'nav-pink';
   } else if (turquoisePages.includes(location.pathname)) {
     navColorClass = 'nav-turquoise';
-  }
+  } 
 
   return (
-    <div className={`navbar-fixed ${navColorClass}`}>
-      <nav>
+    <div className={`navbar-fixed`}>
+      <nav className={navColorClass}>
         <div className="nav-wrapper">
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           <a onClick={handleBurgerClick} className="show-burger" style={{ cursor: 'pointer' }}>
@@ -76,6 +76,7 @@ function Header({ setIsSidebarOpen }) {
         <li><a href="/dashboard">Dashboard</a></li>
         <li><a href="/goals">My Goals</a></li>
         <li><a href="/transactions">My Transactions</a></li>
+        <li><a href="/chat">AI Chat</a></li>
         {user && (
           <li className="li-sidenav-btn">
             <button onClick={handleLogout} className="sidenav-btn">

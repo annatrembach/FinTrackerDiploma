@@ -23,8 +23,8 @@
 
 .filter-buttons button {
   background: none;
-  border: 1px solid #f05761;
-  color: #f05761;
+  border: 1px solid #e96675;
+  color: #dd757e;
   padding: 0.5rem 1rem;
   margin-right: 0.5rem;
   cursor: pointer;
@@ -35,7 +35,7 @@
 
 .filter-buttons button.active,
 .filter-buttons button:hover {
-  background-color: #f05761;
+  background-color: #dd757e;
   color: white;
 }
 
@@ -48,13 +48,13 @@
 .new-goal-form input {
   flex: 1;
   padding: 0.5rem;
-  border: 1px solid #f05761;
+  border: 1px solid #dd757e;
   border-radius: 4px;
   font-size: 1rem;
 }
 
 .new-goal-form button {
-  background-color: #f05761;
+  background-color: #dd757e;
   border: none;
   color: white;
   padding: 0 1rem;
@@ -73,16 +73,23 @@
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+  /* width: 100%; */
+  /* border-collapse: separate; */
+  border-spacing: 0;
+  /* border-radius: 5px; */
+  overflow: hidden;
 }
 
 .goals-table th {
   height: 50px !important;
+  background-color: #e0f7f7;
+  color: #dd757e;
 }
 
 .goals-table th,
 .goals-table td {
   padding: 0.75rem 1rem;
-  border: 1px solid #f05761;
+  border: 1px solid #dd757e;
   text-align: left;
   overflow: hidden;
   white-space: nowrap;
@@ -118,14 +125,14 @@
   border-top: transparent !important;
   border-left: transparent !important;
   padding: 0.75rem 1rem;
-  border: 1px solid #f05761;
+  border: 1px solid #dd757e;
   text-align: center;
   vertical-align: middle;
   width: 20%;
 }
 
 .goals-table tr.completed {
-  background-color: #ffe3e3;
+  background-color: #e0f7f7;
   color: #a94442;
   text-decoration: line-through;
 }
@@ -145,7 +152,7 @@
   box-sizing: border-box;
   font-size: 1rem;
   font-family: inherit;
-  border: 1px solid #f05761;
+  border: 1px solid #e96675;
   border-radius: 4px;
   padding: 0.5rem;
   height: 32px;
@@ -154,8 +161,8 @@
 
 .goals-table button {
   background: none;
-  border: 1px solid #f05761;
-  color: #f05761;
+  border: 1px solid #e96675;
+  color: #e96675;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -167,6 +174,6 @@
 }
 
 .goals-table button:hover {
-  background-color: #f05761;
+  background-color: #e96675;
   color: white;
 }

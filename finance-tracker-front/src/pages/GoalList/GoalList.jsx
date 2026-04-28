@@ -19,6 +19,14 @@ export default function GoalsList({ isSidebarOpen }) {
   const [newGoalTargetAmount, setNewGoalTargetAmount] = useState('');
   const [newGoalDeadline, setNewGoalDeadline] = useState('');
 
+  const formatStatus = (status) => {
+  const map = {
+    'IN_PROGRESS': 'In progress',
+    'COMPLETED': 'Completed',
+  };
+  return map[status] || status;
+};
+
   const loadGoals = () => {
     setIsLoading(true);
     setIsError(false);
@@ -163,12 +171,12 @@ export default function GoalsList({ isSidebarOpen }) {
 
   return (
     <div className={`goals-container ${isSidebarOpen ? 'shifted' : ''}`}>
-      <h2 style={{ color: '#f05761', fontSize: '35px', fontWeight: 'bolder' }}>User Financial Goals</h2>
+      <h2 style={{ color: '#dd757e', fontSize: '35px', fontWeight: 'bolder' }}>User Financial Goals</h2>
 
       <div className="filter-buttons">
         <button className={filter === '' ? 'active' : ''} onClick={() => setFilter('')}>All</button>
-        <button className={filter === 'IN_PROGRESS' ? 'active' : ''} onClick={() => setFilter('IN_PROGRESS')}>In progress</button>
-        <button className={filter === 'COMPLETED' ? 'active' : ''} onClick={() => setFilter('COMPLETED')}>Completed</button>
+        <button className={filter === 'In progress' ? 'active' : ''} onClick={() => setFilter('IN_PROGRESS')}>In progress</button>
+        <button className={filter === 'Completed' ? 'active' : ''} onClick={() => setFilter('COMPLETED')}>Completed</button>
       </div>
 
       <div className="new-goal-form">
@@ -204,23 +212,23 @@ export default function GoalsList({ isSidebarOpen }) {
                   <td><input type="number" value={editingGoal.targetAmount} onChange={e => setEditingGoal({ ...editingGoal, targetAmount: Number(e.target.value) })} min={0} /></td>
                   <td><input type="number" value={editingGoal.currentAmount ?? 0} onChange={e => setEditingGoal({ ...editingGoal, currentAmount: Number(e.target.value) })} min={0} max={editingGoal.targetAmount} /></td>
                   <td><input type="date" value={editingGoal.deadline?.slice(0, 10)} onChange={e => setEditingGoal({ ...editingGoal, deadline: e.target.value })} /></td>
-                  <td>{editingGoal.status}</td>
+                  <td>{formatStatus(editingGoal.status)}</td>
                   <td>
                     <button onClick={handleUpdate} title="Save">Save</button>
                     <button onClick={() => setEditingGoal(null)} title="Cancel">Cancel</button>
                   </td>
                 </tr>
               ) : (
-                <tr key={goal.id} className={goal.status === 'COMPLETED' ? 'completed' : ''}>
+                <tr key={goal.id} className={formatStatus(goal.status === 'COMPLETED' ? 'completed' : '')}>
                   <td>{goal.name}</td>
                   <td>{goal.targetAmount}</td>
                   <td>{goal.currentAmount ?? 0}</td>
                   <td>{goal.deadline}</td>
-                  <td>{goal.status}</td>
+                  <td>{formatStatus(goal.status)}</td>
                   <td>
-                    {goal.status !== 'COMPLETED' && (
+                    {formatStatus(goal.status !== 'COMPLETED' && (
                       <button onClick={() => handleCompleteGoal(goal.id)} title="Complete"><FaCheck /></button>
-                    )}
+                    ))}
                     <button onClick={() => setEditingGoal({ ...goal })} title="Edit"><FaEdit /></button>
                     <button onClick={() => handleDelete(goal.id)} title="Delete"><FaTrash /></button>
                   </td>

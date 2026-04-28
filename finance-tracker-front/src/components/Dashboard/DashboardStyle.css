@@ -17,6 +17,10 @@
   font-weight: 600;
 
 }
+
+.h3-dashboard p {
+  color: #dd757e;
+}
   .summary {
     display: flex;
     justify-content: space-between;

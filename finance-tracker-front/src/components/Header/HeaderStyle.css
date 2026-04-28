@@ -6,12 +6,25 @@
   background-color: #333; 
 }
 
-.nav-pink nav {
-  background-color: #e96675 !important;
+nav.nav-pink {
+  background-color: #dd757e !important;
 }
 
-.nav-turquoise nav {
-  background-color: #2e9c97 !important;
+nav.nav-turquoise {
+  background-color: #dd757e !important;
+}
+
+
+.nav-pink nav,
+.nav-pink a.brand-logo,
+.nav-pink .material-icons{
+  color: #ffffff !important;
+}
+
+.nav-turquoise nav,
+.nav-turquoise a.brand-logo,
+.nav-turquoise .material-icons{
+  color: #ffffff !important;
 }
 
 .nav-wrapper {
