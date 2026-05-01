@@ -6,9 +6,9 @@ services:
     container_name: DB
     restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=FinanceTracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: FinanceTracker
     ports:
       - "5432:5432"
     volumes:
@@ -22,8 +22,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
 
   redis:
     image: redis:7
@@ -32,5 +32,15 @@ services:
     ports:
       - "6379:6379"
 
+  embedding:
+    image: ghcr.io/huggingface/text-embeddings-inference:cpu-latest
+    container_name: EmbeddingService
+    ports:
+      - "8085:80"
+    command:
+      - "--model-id=sentence-transformers/all-MiniLM-L6-v2"
+      - "--port=80"
+
 volumes:
   ft_db_data:
+  tei_model_cache:
