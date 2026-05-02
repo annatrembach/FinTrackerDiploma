@@ -1,0 +1,83 @@
+.ai-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  transition: transform 0.3s ease;
+}
+
+.ai-page.shifted {
+  transform: translateX(150px);
+}
+
+.ai-title {
+  text-align: center;
+  color: #dd757e;
+  font-size: 30px;
+  font-weight: bolder;
+  margin-bottom: 16px;
+}
+
+/* ── Таббар ── */
+.ai-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  padding: 6px 6px 0;
+  background: #fff0f1;
+  border-radius: 10px 10px 0 0;
+  border: 1px solid #dd757e;
+  border-bottom: none;            /* БЕЗ нижньої лінії — вона на .ai-content */
+  position: relative;
+  z-index: 1;
+}
+
+.ai-tabs button {
+  flex: 1;
+  padding: 9px 0 11px;
+  border: 1px solid #dd757e;
+  border-bottom: none;
+  background: #f5b8bc;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  border-radius: 8px 8px 0 0;
+  transition: background 0.15s, color 0.15s;
+  position: relative;
+  z-index: 0;
+}
+
+.ai-tabs button:hover:not(.active) {
+  background: #e89098;
+}
+
+.ai-tabs button.active {
+  background: white;
+  color: #dd757e;
+  font-weight: 700;
+  z-index: 3;
+  /* розтягуємо вниз щоб перекрити верхній border контента */
+  margin-bottom: -1px;
+  padding-bottom: 12px;
+}
+
+.ai-tabs button.active::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #dd757e;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* ── Контент ── */
+.ai-content {
+  background: white;
+  border: 1px solid #dd757e;
+  border-radius: 0 0 10px 10px;
+  padding: 10px;
+  position: relative;
+  z-index: 0;
+  margin-bottom: 30px;
+}

@@ -1,0 +1,198 @@
+* {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.doc-container {
+  width: 60%;
+  max-width: 1000px;
+  min-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  transition: transform 0.5s ease;
+  font-family: Arial, sans-serif;
+}
+
+.doc-container.shifted {
+  transform: translateX(150px);
+}
+
+.doc-title {
+  color: #dd757e;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.doc-box {
+  height: 60vh;
+  max-height: 600px;
+  overflow-y: auto;
+  background: #e0f7f7;
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Повідомлення --- */
+.doc-message {
+  padding: 10px 15px;
+  margin-bottom: 12px;
+  border-radius: 15px;
+  max-width: 75%;
+  position: relative;
+}
+
+.doc-message.user {
+  background: #dd757e;
+  color: #eaf7f7;
+  align-self: flex-end;
+  font-weight: bold;
+}
+
+.doc-message.ai {
+  color: #de5b66;
+  background: #ecd4d6;
+  align-self: flex-start;
+  font-weight: bold;
+}
+
+.msg-time {
+  font-size: 10px;
+  opacity: 0.7;
+  margin-top: 5px;
+  text-align: right;
+}
+
+/* --- Порожній стан та підказки --- */
+.doc-empty {
+  margin: auto;
+  text-align: center;
+}
+
+.doc-empty-title {
+  color: #dd757e;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.doc-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.sug-btn {
+  padding: 8px 16px;
+  border-radius: 15px;
+  border: 1px solid #dd757e;
+  background: white;
+  color: #dd757e;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sug-btn:hover {
+  background: #dd757e;
+  color: white;
+}
+
+/* --- Інпут зона --- */
+.doc-footer-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 50%;
+  margin: 10px 0 5px auto;
+  min-height: 24px;              /* резервуємо висоту навіть коли кнопки немає */
+}
+
+.doc-footer-meta:last-child {
+  align-items: bottom;
+}
+
+.rag-badge {
+  font-size: 11px;
+  color: #006d6f;
+  background: #e0f7f7;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: #dd757e;
+  cursor: pointer;
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+.clear-btn:hover{
+  color: white;
+  background-color: #ff8690 !important;
+}
+
+.doc-input-area {
+  display: flex;
+  align-items: flex-end;         /* кнопка завжди притиснута до низу */
+  gap: 10px;
+  max-width: 50%;
+  margin-left: auto;
+}
+
+.doc-textarea {
+  flex: 1;
+  padding: 12px;
+  border-radius: 15px;
+  color: #dd757e;
+  border: #dd757e solid 1px;
+  font-weight: 500;
+  font-size: 16px;
+  resize: none;
+  outline: none;
+  min-height: 45px;
+  max-height: 150px;
+}
+
+.doc-send-btn {
+  background: #f96e7a;
+  border: none;
+  border-radius: 15px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  transition: 0.3s;
+  height: 45px;                  /* фіксована висота — не залежить від textarea */
+  flex-shrink: 0;                /* не стискається */
+  align-self: flex-end;          /* явно до низу */
+  margin: 0px 0px 0px !important;
+}
+
+.doc-send-btn:hover:not(:disabled) {
+  background: #dd757e;
+}
+
+.doc-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- Анімація завантаження --- */
+.typing-dots span {
+  animation: blink 1.4s infinite both;
+  font-size: 24px;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0% { opacity: .2; }
+  20% { opacity: 1; }
+  100% { opacity: .2; }
+}

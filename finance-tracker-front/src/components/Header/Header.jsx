@@ -76,7 +76,7 @@ function Header({ setIsSidebarOpen }) {
         <li><a href="/dashboard">Dashboard</a></li>
         <li><a href="/goals">My Goals</a></li>
         <li><a href="/transactions">My Transactions</a></li>
-        <li><a href="/chat">AI Chat</a></li>
+        <li><a href="/ai">AI Assistance</a></li>
         {user && (
           <li className="li-sidenav-btn">
             <button onClick={handleLogout} className="sidenav-btn">

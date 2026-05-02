@@ -1,6 +1,9 @@
 package com.tracker.AIService.services.impls;
 
 import com.tracker.AIService.models.dto.doc.DocRequest;
+import com.tracker.AIService.services.AiDocService;
+import com.tracker.AIService.util.AuthContext;
+import com.tracker.AIService.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -17,7 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AiDocServiceImpl {
+public class AiDocServiceImpl implements AiDocService {
 
     private final VectorStore vectorStore;
 
@@ -27,11 +30,18 @@ public class AiDocServiceImpl {
     @Value("${app.doc.search.top-k:4}")
     private int topK;
 
-    @Value("${app.doc.search.similarity-threshold:0.4}")
+    @Value("${app.doc.search.similarity-threshold:0.2}")
     private double similarityThreshold;
 
-    public String answer(DocRequest request) {
+    private final JwtUtil jwtUtil;
+
+    public String answer(DocRequest request, String token) {
         log.info("Processing doc question: {}", request.question());
+
+        Long userId = jwtUtil.extractUserId(token);
+
+        AuthContext.setUserId(userId);
+        AuthContext.setToken(token);
 
         List<Document> relevantDocs = vectorStore.similaritySearch(
                 SearchRequest.builder()

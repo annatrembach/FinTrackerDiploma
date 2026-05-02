@@ -38,8 +38,7 @@ function CustomSelectWithInput({ options, value, onChange, placeholder, readOnly
         setIsOpen(false);
         if (!readOnlyInput) {
           const matchedOption = options.find(
-            o => o.label.toLowerCase() === inputValue.toLowerCase()
-          );
+          o => (o.label || '').toLowerCase() === (inputValue || '').toLowerCase())
           if (matchedOption) {
             onChange(matchedOption.value);
           } else {
@@ -54,8 +53,8 @@ function CustomSelectWithInput({ options, value, onChange, placeholder, readOnly
 
   const searchText = inputValue.toLowerCase();
   const filteredOptions = options.filter(o =>
-    o.label.toLowerCase().includes(searchText)
-  );
+  (o.label || '').toLowerCase().includes((searchText || '').toLowerCase())
+);
 
   return (
     <div ref={ref} className="custom-select-with-input">

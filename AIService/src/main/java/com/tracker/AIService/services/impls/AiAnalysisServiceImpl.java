@@ -5,6 +5,9 @@ import com.tracker.AIService.client.GoalClient;
 import com.tracker.AIService.client.TransactionClient;
 import com.tracker.AIService.models.dto.analysis.AnalysisRequest;
 import com.tracker.AIService.models.dto.analysis.AnalysisResponse;
+import com.tracker.AIService.services.AiAnalysisService;
+import com.tracker.AIService.util.AuthContext;
+import com.tracker.AIService.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -15,11 +18,12 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AiAnalysisServiceImpl {
+public class AiAnalysisServiceImpl implements AiAnalysisService {
 
     private final TransactionClient transactionClient;
     private final GoalClient goalClient;
     private final ObjectMapper objectMapper;
+    private final JwtUtil jwtUtil;
 
     @Qualifier("analysisChatClient")
     private final ChatClient analysisChatClient;
@@ -27,13 +31,20 @@ public class AiAnalysisServiceImpl {
     @Value("${app.analysis.max-transactions:200}")
     private int maxTransactions;
 
+    @Override
     public AnalysisResponse analyze(AnalysisRequest request, String token) {
-        log.info("Starting analysis for userId={}, period={}", request.userId(), request.period());
 
-        String transactionsJson  = fetchTransactions(request.userId(), token);
-        String monthlySummaryJson = fetchMonthlySummary(request.userId(), token);
-        String balanceJson        = fetchBalance(request.userId(), token);
-        String goalsJson          = fetchGoals(request.userId(), token);
+        Long userId = jwtUtil.extractUserId(token);
+
+        AuthContext.setUserId(userId);
+        AuthContext.setToken(token);
+
+        log.info("Starting analysis for userId={}, period={}", userId, request.period());
+
+        String transactionsJson  = fetchTransactions(userId, token);
+        String monthlySummaryJson = fetchMonthlySummary(userId, token);
+        String balanceJson        = fetchBalance(userId, token);
+        String goalsJson          = fetchGoals(userId, token);
 
         String prompt = buildAnalysisPrompt(request, transactionsJson, monthlySummaryJson, balanceJson, goalsJson);
 
