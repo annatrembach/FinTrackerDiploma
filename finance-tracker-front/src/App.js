@@ -12,6 +12,7 @@ import GoalList from './pages/GoalList/GoalList.jsx';
 import TransactionList from './pages/TransactionList/TransactionList.jsx'
 import MainPage from './pages/MainPage/MainPage.jsx';
 import AIAssistancePage from "./pages/AI/AIAssistancePage.jsx";
+import CalendarPage from "./pages/ScheduledTransactionCalendar/CalendarPage.jsx"
 
 
 function App() {
@@ -64,6 +65,15 @@ function App() {
               </>
             }
           />
+          <Route
+          path="/scheduled-transactions"
+          element={
+            <>
+              <Header setIsSidebarOpen={setIsSidebarOpen} />
+              <CalendarPage isSidebarOpen={isSidebarOpen} />
+            </>
+          }
+        />
           <Route
             path="/transactions"
             element={

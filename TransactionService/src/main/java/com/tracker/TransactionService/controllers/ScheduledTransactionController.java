@@ -54,4 +54,10 @@ public class ScheduledTransactionController {
     public ResponseEntity<ScheduledTransaction> cancel(@PathVariable Long id) throws Exception {
         return ResponseEntity.ok(scheduledService.cancel(id));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) throws Exception {
+        scheduledService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -16,4 +16,6 @@ public interface ScheduledTransactionService {
     void executeDue();
 
     ScheduledTransaction update(Long id, ScheduledTransaction updated) throws Exception;
+
+    void delete(Long id) throws Exception;
 }

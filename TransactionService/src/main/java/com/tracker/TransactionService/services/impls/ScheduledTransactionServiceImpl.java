@@ -8,7 +8,6 @@ import com.tracker.TransactionService.publisher.TransactionProducer;
 import com.tracker.TransactionService.repository.ScheduledTransactionRepository;
 import com.tracker.TransactionService.repository.TransactionRepository;
 import com.tracker.TransactionService.services.ScheduledTransactionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +16,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ScheduledTransactionServiceImpl implements ScheduledTransactionService {
 
     private final ScheduledTransactionRepository scheduledRepo;
     private final TransactionRepository transactionRepository;
     private final TransactionProducer transactionProducer;
+
+    public ScheduledTransactionServiceImpl(
+            ScheduledTransactionRepository scheduledRepo,
+            TransactionRepository transactionRepository,
+            TransactionProducer transactionProducer
+    ) {
+        this.scheduledRepo = scheduledRepo;
+        this.transactionRepository = transactionRepository;
+        this.transactionProducer = transactionProducer;
+    }
 
     private static final DateTimeFormatter DATE_FMT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -134,5 +142,10 @@ public class ScheduledTransactionServiceImpl implements ScheduledTransactionServ
             existing.setRecurrence(updated.getRecurrence());
 
         return scheduledRepo.save(existing);
+    }
+
+    @Override
+    public void delete(Long id) throws Exception {
+        scheduledRepo.deleteById(id);
     }
 }

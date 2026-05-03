@@ -47,7 +47,11 @@
 }
 
 .ai-tabs button:hover:not(.active) {
-  background: #e89098;
+  background: #f96e7a !important;
+}
+
+.ai-tabs button:hover.active {
+ background: #ffffff !important; 
 }
 
 .ai-tabs button.active {

@@ -76,7 +76,7 @@
 }
 
 .preset-btn:hover {
-    background: #f05761;
+    background: #f96e7a !important;
     color: white !important;
     border-color: #f05761;
 }

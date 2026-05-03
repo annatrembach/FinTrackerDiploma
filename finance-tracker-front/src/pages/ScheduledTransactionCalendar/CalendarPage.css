@@ -1,0 +1,802 @@
+.scheduled-container {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+  padding: 20px 10px;
+  background-color: #ffffff;
+  transition: transform 0.5s ease, max-width 0.5s ease;
+}
+
+.scheduled-container.shifted {
+  max-width: 800px;
+  transform: translateX(150px);
+}
+
+/* ── Header ── */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.calendar-header h2 {
+  color: #dd757e;
+  font-size: 35px;
+  font-weight: bolder;
+  margin: 0;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.calendar-nav button {
+  background: none;
+  border: 1px solid #e96675;
+  color: #dd757e;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.calendar-nav button:hover {
+  background-color: #dd757e;
+  color: white;
+}
+
+.month-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #dd757e;
+  min-width: 160px;
+  text-align: center;
+}
+
+/* ── Date picker row ── */
+.calendar-picker {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.calendar-picker select {
+  border: 2px solid #dd757e;
+  height: 42px !important;
+  width: auto;
+  color: #dd757e;
+  border-radius: 8px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: #fff;
+  outline: none;
+  font-weight: 600;
+}
+
+.calendar-picker select:focus {
+  box-shadow: 0 0 0 2px #f5b8bc;
+}
+
+/* ── Add form Container ── */
+.add-scheduled-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+  background: #fff5f5;
+  border: 2px solid #f5b8bc;
+  border-radius: 14px;
+  padding: 1.2rem;
+  position: relative;
+}
+
+.form-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.form-inputs input,
+.form-inputs select,
+.custom-select-with-input {
+  flex: 1 1 150px;
+}
+
+.custom-select-input {
+    width: 100% !important;
+}
+
+/* ── Recurrence Group ── */
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 5px;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.recurrence-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recurrence-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #dd757e;
+}
+
+.recurrence-options {
+  display: flex;
+  gap: 8px;
+}
+
+.recurrence-option {
+  font-size: 0.85rem;
+  padding: 5px 12px;
+  border: 1.5px solid #dd757e;
+  border-radius: 20px;
+  cursor: pointer;
+  background: white;
+  color: #dd757e;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.recurrence-option input {
+  display: none; /* ховаємо стандартну радіо-кнопку */
+}
+
+.recurrence-option:hover {
+  border-color: #dd757e;
+}
+
+.recurrence-option.active {
+  background: #dd757e;
+  color: white !important;
+}
+
+/* ── Add Button (Shorter, Wider, Bottom-Right) ── */
+.add-btn {
+  background-color: #dd757e;
+  border: none;
+  color: white;
+  padding: 8px 35px; /* менша висота, більша ширина */
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+  height: fit-content;
+  align-self: flex-end;
+}
+
+.add-btn:hover {
+  background-color: #c9575f;
+}
+
+.add-btn:active {
+  transform: scale(0.98);
+}
+
+/* ── Calendar grid ── */
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #dd757e;
+  padding: 6px 0;
+  background: #e0f7f7;
+  border-radius: 8px;
+}
+
+.calendar-cells {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+/* individual day card */
+.cal-cell {
+  border: 1.5px solid #f5b8bc;
+  border-radius: 12px;
+  min-height: 80px;
+  padding: 6px 7px;
+  position: relative;
+  cursor: default;
+  background: #fff;
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  overflow: visible;
+}
+
+.cal-cell.other-month {
+  background: #fafafa;
+  border-color: #f0f0f0;
+}
+
+.cal-cell.today {
+  background: #fff0f1;
+  border-color: #dd757e;
+}
+
+.cal-cell.has-transactions {
+  background: #ffe4e6;
+  border-color: #dd757e;
+  cursor: pointer;
+}
+
+.cal-cell.has-transactions:hover {
+  background: #ffd0d4;
+  box-shadow: 0 3px 12px rgba(221,117,126,0.25);
+}
+
+.day-number {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #666;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.cal-cell.other-month .day-number { color: #ccc; }
+.cal-cell.today .day-number { color: #dd757e; font-size: 0.9rem; }
+
+/* dots */
+.tx-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.tx-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #dd757e;
+  flex-shrink: 0;
+}
+
+.tx-dot.income  { background-color: #4caf82; }
+.tx-dot.expense { background-color: #e96675; }
+
+/* ── Tooltip ── */
+.tx-tooltip {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  background: #fff;
+  border: 1.5px solid #dd757e;
+  border-radius: 12px;
+  padding: 0.6rem 0.85rem;
+  min-width: 210px;
+  max-width: 260px;
+  box-shadow: 0 6px 20px rgba(221,117,126,0.22);
+  pointer-events: none;
+}
+
+.tx-tooltip h4 {
+  margin: 0 0 0.4rem 0;
+  font-size: 0.82rem;
+  color: #dd757e;
+  font-weight: 700;
+  border-bottom: 1px solid #f5b8bc;
+  padding-bottom: 0.3rem;
+}
+
+.tx-tooltip-item {
+  font-size: 0.79rem;
+  color: #444;
+  padding: 3px 0;
+  border-bottom: 1px dotted #f5b8bc;
+  line-height: 1.5;
+}
+
+.tx-tooltip-item:last-child { border-bottom: none; }
+
+.txi-amount { font-weight: 700; }
+.txi-amount.income  { color: #4caf82; }
+.txi-amount.expense { color: #e96675; }
+
+/* status badge */
+.status-badge {
+  display: inline-block;
+  font-size: 0.67rem;
+  padding: 1px 6px;
+  border-radius: 20px;
+  margin-left: 4px;
+  font-weight: 700;
+}
+
+.status-badge.PENDING   { background: #fff3cd; color: #856404; }
+.status-badge.EXECUTED  { background: #d1e7dd; color: #0f5132; }
+.status-badge.CANCELLED { background: #f8d7da; color: #842029; }
+
+/* ── Cards list below calendar ── */
+.scheduled-list {
+  margin-top: 1.8rem;
+}
+
+.scheduled-list h3 {
+  color: #dd757e;
+  font-size: 1.2rem;
+  margin-bottom: 0.85rem;
+}
+
+.scheduled-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scheduled-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid #f5b8bc;
+  border-radius: 14px;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  transition: box-shadow 0.2s, background 0.2s;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.scheduled-card:hover {
+  background: #fff5f5;
+  box-shadow: 0 3px 12px rgba(221,117,126,0.15);
+}
+
+.sc-date {
+  font-size: 0.82rem;
+  color: #aaa;
+  min-width: 90px;
+}
+
+.sc-amount {
+  font-size: 1.05rem;
+  font-weight: 700;
+  min-width: 80px;
+}
+
+.sc-amount.income  { color: #4caf82; }
+.sc-amount.expense { color: #e96675; }
+
+.sc-meta {
+  flex: 1;
+  font-size: 0.85rem;
+  color: #555;
+  min-width: 120px;
+}
+
+.sc-meta span {
+  margin-right: 6px;
+}
+
+.sc-recurrence {
+  font-size: 0.75rem;
+  background: #e0f7f7;
+  color: #4a9999;
+  border-radius: 20px;
+  padding: 2px 9px;
+  font-weight: 600;
+}
+
+.sc-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center !important;
+}
+
+.sc-actions button {
+  background: none;
+  border: 1.5px solid #e96675;
+  color: #e96675;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  padding: 5px;             /* однаковий паддінг для квадратної форми */
+  width: 32px;              /* фіксована ширина */
+  height: 32px;             /* фіксована висота */
+  transition: background-color 0.2s;
+
+  /* Центрування іконки */
+  display: inline-flex;     /* використовуємо flex для вирівнювання */
+  align-items: center;      /* центр по вертикалі */
+  justify-content: center;  /* центр по горизонталі */
+}
+
+/* Окремо приберемо відступи у іконок, якщо вони заважають */
+.sc-actions button svg {
+  display: block;
+}
+
+.sc-actions button:hover {
+  background-color: #e96675;
+  color: white;
+}
+
+.error-msg   { color: #e96675; margin: 0.5rem 0; }
+.loading-msg { color: #aaa;    margin: 0.5rem 0; }
+.no-user-msg { color: #aaa;    margin: 1rem 0; font-size: 0.95rem; }
+
+.recurrence-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.recurrence-options {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.recurrence-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #fff;
+  transition: 0.2s;
+}
+
+.recurrence-option:hover {
+  background: #f5f5f5;
+}
+
+.calendar-nav button {
+  background: none;
+  border: 2px solid #e96675; /* Товстіша лінія рамки */
+  color: #e96675;
+  width: 42px;  /* Збільшили ширину */
+  height: 42px; /* Збільшили висоту */
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+
+.calendar-nav button:hover {
+  background-color: #dd757e;
+  color: white;
+  transform: scale(1.05); /* Легке збільшення при наведенні */
+}
+
+.calendar-nav button:hover svg {
+  stroke: white; /* Щоб жирність залишалася білою на рожевому фоні */
+}
+.list-filters-advanced {
+  display: flex;
+  gap: 0; /* Прибираємо проміжок, щоб злити елементи */
+  margin-bottom: 20px;
+  background: #fff;
+  border: 2px solid #f5b8bc;
+  border-radius: 12px;
+  overflow: hidden; /* Щоб краї інпутів не вилазили за радіус */
+}
+
+.filter-field-select {
+  flex: 0 0 150px;
+  background: #fff5f5;
+  border: none;
+  border-right: 2px solid #f5b8bc;
+  padding: 10px;
+  color: #dd757e;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+}
+
+.filter-value-container {
+  flex: 1;
+  display: flex;
+}
+
+.filter-value-container input, 
+.filter-value-container select {
+  width: 100%;
+  border: none;
+  padding: 10px 15px;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.filter-value-container input::placeholder {
+  color: #ccc;
+}
+
+/* Ефект фокусу на всій панелі */
+.list-filters-advanced:focus-within {
+  border-color: #dd757e;
+  box-shadow: 0 0 8px rgba(221, 117, 126, 0.2);
+}
+
+
+/* ── Filter bar ── */
+.filter-bar {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 1.2rem;
+  background: #fff;
+  border: 2px solid #f5b8bc;
+  border-radius: 10px;
+
+  max-width: 450px; 
+  width: 100%;
+  height: 42px; 
+  position: relative; /* Додаємо для коректного позиціонування внутрішніх елементів */
+}
+
+/* Кастомний селект усередині фільтра */
+.filter-select-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #fff5f5;
+  border-right: 2px solid #f5b8bc;
+  /* Додаємо заокруглення зліва, щоб воно збігалося з батьківським контейнером */
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+/* Випадаюче вікно для нижнього фільтра */
+.filter-options-dropdown {
+  position: absolute;
+  top: 44px; 
+  left: -2px; 
+  width: calc(100% + 4px);
+  background: #fff5f5;
+  color: #dd757e;
+  border: 2px solid #f5b8bc;
+  border-radius: 10px;
+  z-index: 1100;
+  list-style: none;
+  padding: 5px 0;
+  margin: 0;
+  box-shadow: 0 4px 12px rgba(221, 117, 126, 0.15);
+}
+
+.filter-option-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+/* Правки для поля введення значення */
+.filter-value-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #fff;
+}
+
+/* Якщо всередині wrap теж стоїть селект (наприклад для статусу) */
+.filter-value-wrap .filter-select-container {
+  background: transparent;
+  border-right: none;
+}
+
+.filter-value-input {
+  width: 100%;
+  height: 100%;
+  padding-left: 10px !important;
+  font-size: 0.92rem;
+  border: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background: transparent !important;
+  margin: 0px !important;
+}
+
+/* Стиль для назви обраного поля (ліва частина) */
+.filter-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 12px;
+  cursor: pointer;
+  /* Додаємо ваші фірмові кольори */
+  color: #dd757e !important; 
+  font-weight: 700 !important;
+  font-size: 0.88rem;
+  height: 100%;
+}
+
+/* Стиль для тексту всередині випадаючого списку (пункти меню) */
+.filter-option-item {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  /* Робимо текст пунктів також рожевим */
+  color: #dd757e; 
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.filter-option-item:hover {
+  background: #fff5f5;
+  /* При наведенні робимо колір ще насиченішим */
+  color: #e96675; 
+}
+
+/* Стиль для правої частини (All categories / Status і т.д.) */
+.filter-value-wrap .filter-select-trigger {
+  color: #dd757e !important;
+  font-weight: 600 !important; /* Можна зробити трохи тоншим за основний заголовок */
+}
+
+/* Стиль стрілочки (трикутника) */
+.filter-chevron {
+  font-size: 0.7rem;
+  color: #dd757e; /* Також робимо стрілочку рожевою */
+  transition: transform 0.2s;
+  margin-left: 8px;
+}
+
+.filter-clear-btn {
+  /* Прибираємо фіксовану ширину, яка розтягує кнопку */
+  flex: 0 0 32px; 
+  width: 32px;
+  background-color: #dd757e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s, transform 0.1s;
+  height: 34px; 
+  align-self: center;
+  margin: 0px !important;
+}
+
+.filter-clear-btn:hover {
+  background-color: #e96675;
+}
+
+.filter-clear-btn:active {
+  transform: scale(0.95);
+}
+
+/* Корекція іконки всередині кнопки */
+.filter-clear-btn span, 
+.filter-clear-btn i {
+  font-size: 14px;
+  line-height: 1;
+  font-weight: bold;
+}
+
+/* Override Materialize hiding native selects */
+.filter-bar select,
+.filter-bar .filter-field-select,
+.filter-bar .filter-value-select,
+.add-scheduled-form select,
+.calendar-picker select {
+  display: block !important;
+  -webkit-appearance: auto !important;
+  appearance: auto !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  position: static !important;
+  height: auto !important;
+}
+
+/* Стилізація перемикача Income/Expense у формі */
+.type-toggle-container {
+  display: flex;
+  flex: 1 1 150px;
+  border: 2px solid #f5b8bc;
+  border-radius: 8px; /* як і в інших інпутів */
+  overflow: hidden;
+  background: #fff;
+}
+
+.type-toggle-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px 5px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #dd757e;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.type-toggle-btn.active {
+  background-color: #dd757e;
+  color: white;
+}
+
+.type-toggle-btn:first-child {
+  border-right: 1px solid #f5b8bc;
+}
+
+/* Контейнер для одного селекта у хедері */
+.header-select-container {
+  position: relative; /* Щоб список позиціонувався відносно цього блоку */
+  display: inline-block;
+}
+
+.header-select-input-wrapper {
+  cursor: pointer;
+}
+
+/* Оновлений стиль інпуту для хедера */
+.custom-select-input.header-style {
+  border: 2px solid #e96675 !important;
+  border-radius: 12px !important; /* Трохи більше заокруглення для м'якості */
+  height: 42px !important;
+  width: 80% !important;
+  color: #dd757e !important;
+  font-weight: 600 !important;
+  background-color: #fff;
+  padding: 0 12px !important;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* Випадаючий список саме для хедера */
+.header-select-options {
+  position: absolute;
+  top: 46px; /* Трохи нижче інпуту */
+  left: 0;
+  width: 100%;
+  background: #e0f7f7;
+  border: 2px solid #dd757e;
+  border-radius: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  z-index: 1000; /* Щоб був поверх календаря */
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(221, 117, 126, 0.15);
+}
+
+/* Корекція загального контейнера в хедері */
+.calendar-picker {
+  display: flex;
+  gap: 8px; /* Відстань між Травнем та 2026 */
+  align-items: center;
+}
+
+/* Щоб кнопки навігації не злипалися з селектами */
+.calendar-nav-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
