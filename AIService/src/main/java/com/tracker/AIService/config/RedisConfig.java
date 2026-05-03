@@ -1,12 +1,14 @@
 package com.tracker.AIService.config;
 
 import com.tracker.AIService.models.dto.goal.GoalDraft;
+import com.tracker.AIService.models.dto.scheduledTransaction.ScheduledTransactionDraft;
 import com.tracker.AIService.models.dto.transaction.TransactionDraft;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -70,6 +72,46 @@ public class RedisConfig {
 
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(serializer);
+
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, ScheduledTransactionDraft> scheduledDraftRedisTemplate(
+            RedisConnectionFactory factory,
+            ObjectMapper objectMapper) {
+
+        RedisTemplate<String, ScheduledTransactionDraft> template = new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+
+        RedisSerializer<ScheduledTransactionDraft> serializer = new RedisSerializer<>() {
+
+            @Override
+            public byte[] serialize(ScheduledTransactionDraft draft) throws SerializationException {
+                try {
+                    return objectMapper.writeValueAsBytes(draft);
+                } catch (Exception e) {
+                    throw new SerializationException("Error serializing ScheduledTransactionDraft", e);
+                }
+            }
+
+            @Override
+            public ScheduledTransactionDraft deserialize(byte[] bytes) throws SerializationException {
+                try {
+                    if (bytes == null) return null;
+                    return objectMapper.readValue(bytes, ScheduledTransactionDraft.class);
+                } catch (Exception e) {
+                    throw new SerializationException("Error deserializing ScheduledTransactionDraft", e);
+                }
+            }
+        };
+
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(serializer);
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(serializer);
+
+        template.afterPropertiesSet();
 
         return template;
     }
