@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 import "./AIDocChat.css";
 
 const SUGGESTIONS = [
@@ -76,36 +77,42 @@ const AIChat = ({ isSidebarOpen }) => {
 
   return (
     <div className={`doc-container ${isSidebarOpen ? "shifted" : ""}`}>
-      <h2 className="doc-title">AI Financial Assistant</h2>
+      <div className="doc-chat-area">
+        <h2 className="doc-title">AI Financial Assistant</h2>
 
-      <div className="doc-box">
-        {messages.length === 0 ? (
-          <div className="doc-empty">
-            <p className="doc-empty-title">Ask anything about your finances</p>
-            <div className="doc-suggestions">
-              {SUGGESTIONS.map((s) => (
-                <button key={s} className="sug-btn" onClick={() => sendMessage(s)}>
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
-        ) : (
-          messages.map((msg, i) => (
-            <div key={i} className={`doc-message ${msg.sender}`}>
-              <div className="msg-content">{msg.text}</div>
-              <div className="msg-time">{msg.time}</div>
-            </div>
-          ))
-        )}
-        {loading && (
-          <div className="doc-message ai loading">
-            <div className="typing-dots">
-              <span>.</span><span>.</span><span>.</span>
-            </div>
-          </div>
-        )}
-        <div ref={bottomRef} />
+              <div className="doc-box">
+                {messages.length === 0 ? (
+                  <div className="doc-empty">
+                    <p className="doc-empty-title">Ask anything about your finances</p>
+                    <div className="doc-suggestions">
+                      {SUGGESTIONS.map((s) => (
+                        <button key={s} className="sug-btn" onClick={() => sendMessage(s)}>
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  messages.map((msg, i) => (
+                    <div key={i} className={`doc-message ${msg.sender}`}>
+                      <div className="msg-content markdown-content">
+                                      <ReactMarkdown>
+                                        {msg.text}
+                                      </ReactMarkdown>
+                                    </div>
+                      <div className="msg-time">{msg.time}</div>
+                    </div>
+                  ))
+                )}
+                {loading && (
+                  <div className="doc-message ai loading">
+                    <div className="typing-dots">
+                      <span>.</span><span>.</span><span>.</span>
+                    </div>
+                  </div>
+                )}
+                <div ref={bottomRef} />
+              </div>
       </div>
 
       <div className="doc-footer-meta">

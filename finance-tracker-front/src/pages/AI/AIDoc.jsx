@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 import "./AIDocChat.css";
 
 const SUGGESTIONS = [
@@ -92,7 +93,11 @@ const AIDoc = ({ isSidebarOpen }) => {
         ) : (
           messages.map((msg, i) => (
             <div key={i} className={`doc-message ${msg.sender}`}>
-              <div className="msg-content">{msg.text}</div>
+              <div className="msg-content markdown-content">
+                <ReactMarkdown>
+                  {msg.text}
+                </ReactMarkdown>
+              </div>
               <div className="msg-time">{msg.time}</div>
             </div>
           ))

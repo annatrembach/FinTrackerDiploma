@@ -3,22 +3,57 @@ import { useSelector } from 'react-redux';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import './TransactionListStyle.css';
 
-const API_BASE = 'http://localhost:8082/api/transactions';
+const API_BASE     = 'http://localhost:8082/api/transactions';
 const CATEGORY_API = 'http://localhost:8082/api/categories';
-const GOALS_API = 'http://localhost:8083/api/goals/';
+const GOALS_API    = 'http://localhost:8083/api/goals/';
 
 const formatType = (type) => {
-  const map = {
-    'INCOME': 'Income',
-    'EXPENSE': 'Expense',
-  };
+  const map = { INCOME: 'Income', EXPENSE: 'Expense' };
   return map[type] || type;
-  };
+};
 
+/* ── FilterSelect — точна копія з CalendarPage ── */
+function FilterSelect({ value, options, onChange, width = '150px' }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+
+  useEffect(() => {
+    const handler = e => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const displayLabel = options.find(opt => opt.value === value)?.label || value;
+
+  return (
+    <div ref={ref} className="filter-select-container" style={{ width }}>
+      <div className="filter-select-trigger" onClick={() => setOpen(!open)}>
+        <span>{displayLabel}</span>
+        <span className={`filter-chevron ${open ? 'open' : ''}`}>▼</span>
+      </div>
+      {open && (
+        <ul className="filter-options-dropdown">
+          {options.map(opt => (
+            <li
+              key={String(opt.value)}
+              className="filter-option-item"
+              onClick={() => { onChange(opt.value); setOpen(false); }}
+            >
+              {opt.label}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/* ── CustomSelectWithInput — для форми додавання/редагування ── */
 function CustomSelectWithInput({ options, value, onChange, placeholder, readOnlyInput = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
-
   const ref = useRef();
 
   useEffect(() => {
@@ -38,12 +73,10 @@ function CustomSelectWithInput({ options, value, onChange, placeholder, readOnly
         setIsOpen(false);
         if (!readOnlyInput) {
           const matchedOption = options.find(
-          o => (o.label || '').toLowerCase() === (inputValue || '').toLowerCase())
-          if (matchedOption) {
-            onChange(matchedOption.value);
-          } else {
-            onChange(inputValue.trim());
-          }
+            o => (o.label || '').toLowerCase() === (inputValue || '').toLowerCase()
+          );
+          if (matchedOption) onChange(matchedOption.value);
+          else onChange(inputValue.trim());
         }
       }
     }
@@ -51,10 +84,9 @@ function CustomSelectWithInput({ options, value, onChange, placeholder, readOnly
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [inputValue, onChange, readOnlyInput, options]);
 
-  const searchText = inputValue.toLowerCase();
   const filteredOptions = options.filter(o =>
-  (o.label || '').toLowerCase().includes((searchText || '').toLowerCase())
-);
+    (o.label || '').toLowerCase().includes((inputValue || '').toLowerCase())
+  );
 
   return (
     <div ref={ref} className="custom-select-with-input">
@@ -94,54 +126,47 @@ function CustomSelectWithInput({ options, value, onChange, placeholder, readOnly
   );
 }
 
+/* ══════════════════════════════════════════════════════════ */
 export default function TransactionList({ isSidebarOpen }) {
-  const user = useSelector(state => state.auth.user);
+  const user  = useSelector(state => state.auth.user);
   const token = useSelector(state => state.auth.jwt);
 
-  const [transactions, setTransactions] = useState([]);
-  const [filterType, setFilterType] = useState('');
-  const [filterCategory, setFilterCategory] = useState('');
-  const [categories, setCategories] = useState([]);
-  const [goals, setGoals] = useState([]);
-
-  const [newAmount, setNewAmount] = useState('');
-  const [newType, setNewType] = useState('');
-  const [newCategoryInput, setNewCategoryInput] = useState('');
-  const [newGoalInput, setNewGoalInput] = useState('');
-  const [newDescription, setNewDescription] = useState('');
-  const [newDate, setNewDate] = useState('');
-
+  const [transactions,       setTransactions]       = useState([]);
+  const [categories,         setCategories]         = useState([]);
+  const [goals,              setGoals]              = useState([]);
   const [editingTransaction, setEditingTransaction] = useState(null);
 
+  const [newAmount,        setNewAmount]        = useState('');
+  const [newType,          setNewType]          = useState('');
+  const [newCategoryInput, setNewCategoryInput] = useState('');
+  const [newGoalInput,     setNewGoalInput]     = useState('');
+  const [newDescription,   setNewDescription]   = useState('');
+  const [newDate,          setNewDate]          = useState('');
+
+  /* filter — як у CalendarPage */
+  const [filterField, setFilterField] = useState('description');
+  const [filterValue, setFilterValue] = useState('');
+
+  /* ── loaders ── */
   const loadTransactions = () => {
     if (!user?.id) return;
-
-    const query = new URLSearchParams();
-
-    if (filterType && filterType !== '') query.append('type', filterType);
-    if (filterCategory && filterCategory !== '') query.append('category', filterCategory);
-
-    fetch(`${API_BASE}/filter?${query.toString()}`, {
+    fetch(`${API_BASE}/filter?`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
-      .then(data => setTransactions(data))
+      .then(data => setTransactions(Array.isArray(data) ? data : []))
       .catch(() => alert('Failed to load transactions'));
   };
 
   const loadCategories = () => {
-    fetch(CATEGORY_API, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    fetch(CATEGORY_API, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => res.json())
       .then(data => setCategories(Array.isArray(data) ? data : []))
       .catch(() => {});
   };
 
   const loadGoals = () => {
-    fetch(GOALS_API, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    fetch(GOALS_API, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => res.json())
       .then(data => setGoals(Array.isArray(data) ? data : []))
       .catch(() => {});
@@ -151,8 +176,28 @@ export default function TransactionList({ isSidebarOpen }) {
     loadTransactions();
     loadCategories();
     loadGoals();
-  }, [filterType, filterCategory, user?.id]);
+  }, [user?.id]);
 
+  /* ── фронтова фільтрація ── */
+  const filteredTransactions = transactions.filter(t => {
+    if (!filterValue) return true;
+    switch (filterField) {
+      case 'description':
+        return (t.description || '').toLowerCase().includes(filterValue.toLowerCase());
+      case 'category':
+        return (t.category?.name || '').toLowerCase().includes(filterValue.toLowerCase());
+      case 'type':
+        return t.type === filterValue;
+      case 'amountMin':
+        return Number(t.amount) >= Number(filterValue);
+      case 'dateFrom':
+        return t.transactionDate >= filterValue;
+      default:
+        return true;
+    }
+  });
+
+  /* ── CRUD ── */
   const handleAddTransaction = () => {
     if (!user?.id) return alert('User not logged in');
     if (!newAmount || newAmount <= 0) return alert('Enter valid amount');
@@ -163,19 +208,14 @@ export default function TransactionList({ isSidebarOpen }) {
 
     const existingCategory =
       typeof newCategoryInput === 'string' && isNaN(newCategoryInput)
-        ? categories.find(
-            c => c.name.toLowerCase() === newCategoryInput.trim().toLowerCase()
-          )
+        ? categories.find(c => c.name.toLowerCase() === newCategoryInput.trim().toLowerCase())
         : categories.find(c => c.id.toString() === newCategoryInput.toString());
 
     const createCategoryIfNeeded = existingCategory
       ? Promise.resolve(existingCategory)
       : fetch(CATEGORY_API, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({ name: newCategoryInput.trim() }),
         }).then(res => {
           if (!res.ok) throw new Error('Failed to create category');
@@ -183,13 +223,10 @@ export default function TransactionList({ isSidebarOpen }) {
         });
 
     createCategoryIfNeeded
-      .then(category => {
-        return fetch(`${API_BASE}/create`, {
+      .then(category =>
+        fetch(`${API_BASE}/create`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({
             amount: Number(newAmount),
             type: newType.toUpperCase(),
@@ -199,18 +236,12 @@ export default function TransactionList({ isSidebarOpen }) {
             category: { id: category.id },
             goalId: newGoalInput || null,
           }),
-        });
-      })
+        })
+      )
       .then(() => {
-        setNewAmount('');
-        setNewType('');
-        setNewCategoryInput('');
-        setNewGoalInput('');
-        setNewDescription('');
-        setNewDate('');
-        loadTransactions();
-        loadCategories();
-        loadGoals();
+        setNewAmount(''); setNewType(''); setNewCategoryInput('');
+        setNewGoalInput(''); setNewDescription(''); setNewDate('');
+        loadTransactions(); loadCategories(); loadGoals();
       })
       .catch(err => alert(err.message || 'Failed to add transaction'));
   };
@@ -225,68 +256,41 @@ export default function TransactionList({ isSidebarOpen }) {
   };
 
   const handleUpdateTransaction = () => {
-    if (!editingTransaction || editingTransaction.amount <= 0) {
+    if (!editingTransaction || editingTransaction.amount <= 0)
       return alert('Amount must be positive');
-    }
 
     fetch(`${API_BASE}/update/${editingTransaction.id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({
         amount: editingTransaction.amount,
         type: editingTransaction.type,
         description: editingTransaction.description,
         transactionDate: editingTransaction.transactionDate,
         userId: user.id,
-        category: editingTransaction.category
-          ? { id: editingTransaction.category }
-          : null,
+        category: editingTransaction.category ? { id: editingTransaction.category } : null,
         goalId: editingTransaction.goal || null,
       }),
     })
-      .then(res => {
-        if (!res.ok) throw new Error();
-        return res.json();
-      })
-      .then(() => {
-        setEditingTransaction(null);
-        loadTransactions();
-      })
+      .then(res => { if (!res.ok) throw new Error(); return res.json(); })
+      .then(() => { setEditingTransaction(null); loadTransactions(); })
       .catch(() => alert('Failed to update transaction'));
   };
 
-  const typeOptions = [
-    { value: '', label: 'All' },
-    { value: 'INCOME', label: 'Income' },
+  const typeOptions     = [
+    { value: '',        label: 'All'     },
+    { value: 'INCOME',  label: 'Income'  },
     { value: 'EXPENSE', label: 'Expense' },
   ];
+  const categoryOptions = categories.map(c => ({ value: c.id,  label: c.name }));
+  const goalOptions     = goals.map(g =>      ({ value: g.id,  label: g.name }));
 
-  const categoryOptions = categories.map(c => ({ value: c.id, label: c.name }));
-  const goalOptions = goals.map(g => ({ value: g.id, label: g.name }));
-
+  /* ════════════════ render ════════════════ */
   return (
     <div className={`transactions-container ${isSidebarOpen ? 'shifted' : ''}`}>
       <h2 className="title">User Transactions</h2>
 
-      <h3 className="section-title">Filter by:</h3>
-      <div className="filter-controls">
-        <CustomSelectWithInput
-          options={typeOptions}
-          value={filterType}
-          onChange={setFilterType}
-          placeholder="Type"
-        />
-        <CustomSelectWithInput
-          options={categoryOptions}
-          value={filterCategory}
-          onChange={setFilterCategory}
-          placeholder="Category"
-        />
-      </div>
-
+      {/* ── Add form ── */}
       <h3 className="section-title">Add New Transaction:</h3>
       <div className="new-transaction-form">
         <input
@@ -328,6 +332,89 @@ export default function TransactionList({ isSidebarOpen }) {
         <button onClick={handleAddTransaction}>Add</button>
       </div>
 
+      {/* ── Filter bar — як у CalendarPage ── */}
+      <div className="filter-bar">
+        <FilterSelect
+          value={filterField}
+          options={[
+            { value: 'description', label: 'Description' },
+            { value: 'category',    label: 'Category'    },
+            { value: 'type',        label: 'Type'        },
+            { value: 'amountMin',   label: 'Amount ≥'    },
+            { value: 'dateFrom',    label: 'Date ≥'      },
+          ]}
+          onChange={val => { setFilterField(val); setFilterValue(''); }}
+          width="150px"
+        />
+
+        <div className="filter-value-wrap">
+          {filterField === 'type' && (
+            <FilterSelect
+              value={filterValue}
+              options={[
+                { value: '',        label: 'All types' },
+                { value: 'INCOME',  label: 'Income'    },
+                { value: 'EXPENSE', label: 'Expense'   },
+              ]}
+              onChange={setFilterValue}
+              width="100%"
+            />
+          )}
+
+          {filterField === 'category' && (
+            <FilterSelect
+              value={filterValue}
+              options={[
+                { value: '', label: 'All categories' },
+                ...categories.map(c => ({ value: c.name, label: c.name })),
+              ]}
+              onChange={setFilterValue}
+              width="100%"
+            />
+          )}
+
+          {filterField === 'dateFrom' && (
+            <input
+              type="date"
+              className="filter-value-input"
+              value={filterValue}
+              onChange={e => setFilterValue(e.target.value)}
+            />
+          )}
+
+          {filterField === 'amountMin' && (
+            <input
+              type="number"
+              className="filter-value-input"
+              placeholder="Min amount..."
+              value={filterValue}
+              onChange={e => setFilterValue(e.target.value)}
+            />
+          )}
+
+          {filterField === 'description' && (
+            <input
+              type="text"
+              className="filter-value-input"
+              placeholder="Search description..."
+              value={filterValue}
+              onChange={e => setFilterValue(e.target.value)}
+            />
+          )}
+
+          {filterValue && (
+            <button
+              className="filter-clear-btn"
+              onClick={() => setFilterValue('')}
+              title="Clear"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ── Table ── */}
       <table className="transactions-table">
         <thead>
           <tr>
@@ -340,7 +427,7 @@ export default function TransactionList({ isSidebarOpen }) {
           </tr>
         </thead>
         <tbody>
-          {transactions.map(t => {
+          {filteredTransactions.map(t => {
             if (editingTransaction && editingTransaction.id === t.id) {
               return (
                 <tr key={t.id}>
@@ -349,10 +436,7 @@ export default function TransactionList({ isSidebarOpen }) {
                       type="number"
                       value={editingTransaction.amount}
                       onChange={e =>
-                        setEditingTransaction({
-                          ...editingTransaction,
-                          amount: Number(e.target.value),
-                        })
+                        setEditingTransaction({ ...editingTransaction, amount: Number(e.target.value) })
                       }
                     />
                   </td>
@@ -360,12 +444,7 @@ export default function TransactionList({ isSidebarOpen }) {
                     <CustomSelectWithInput
                       options={typeOptions.slice(1)}
                       value={editingTransaction.type}
-                      onChange={type =>
-                        setEditingTransaction({
-                          ...editingTransaction,
-                          type,
-                        })
-                      }
+                      onChange={type => setEditingTransaction({ ...editingTransaction, type })}
                       placeholder="Type"
                     />
                   </td>
@@ -374,10 +453,7 @@ export default function TransactionList({ isSidebarOpen }) {
                       type="text"
                       value={editingTransaction.description}
                       onChange={e =>
-                        setEditingTransaction({
-                          ...editingTransaction,
-                          description: e.target.value,
-                        })
+                        setEditingTransaction({ ...editingTransaction, description: e.target.value })
                       }
                     />
                   </td>
@@ -386,10 +462,7 @@ export default function TransactionList({ isSidebarOpen }) {
                       type="date"
                       value={editingTransaction.transactionDate}
                       onChange={e =>
-                        setEditingTransaction({
-                          ...editingTransaction,
-                          transactionDate: e.target.value,
-                        })
+                        setEditingTransaction({ ...editingTransaction, transactionDate: e.target.value })
                       }
                     />
                   </td>
@@ -397,20 +470,13 @@ export default function TransactionList({ isSidebarOpen }) {
                     <CustomSelectWithInput
                       options={categoryOptions}
                       value={editingTransaction.category}
-                      onChange={category =>
-                        setEditingTransaction({
-                          ...editingTransaction,
-                          category,
-                        })
-                      }
+                      onChange={category => setEditingTransaction({ ...editingTransaction, category })}
                       placeholder="Category"
                     />
                   </td>
                   <td>
                     <button onClick={handleUpdateTransaction}>Save</button>
-                    <button onClick={() => setEditingTransaction(null)}>
-                      Cancel
-                    </button>
+                    <button onClick={() => setEditingTransaction(null)}>Cancel</button>
                   </td>
                 </tr>
               );
@@ -424,15 +490,19 @@ export default function TransactionList({ isSidebarOpen }) {
                 <td>{t.transactionDate}</td>
                 <td>{t.category?.name || ''}</td>
                 <td>
-                  <button onClick={() => setEditingTransaction({
-                    id: t.id,
-                    amount: t.amount,
-                    type: t.type,
-                    description: t.description,
-                    transactionDate: t.transactionDate,
-                    category: t.category?.id || '',
-                    goal: t.goalId || '',
-                  })}>
+                  <button
+                    onClick={() =>
+                      setEditingTransaction({
+                        id:              t.id,
+                        amount:          t.amount,
+                        type:            t.type,
+                        description:     t.description,
+                        transactionDate: t.transactionDate,
+                        category:        t.category?.id || '',
+                        goal:            t.goalId || '',
+                      })
+                    }
+                  >
                     <FaEdit />
                   </button>
                   <button onClick={() => handleDeleteTransaction(t.id)}>
@@ -442,7 +512,7 @@ export default function TransactionList({ isSidebarOpen }) {
               </tr>
             );
           })}
-          {transactions.length === 0 && (
+          {filteredTransactions.length === 0 && (
             <tr>
               <td colSpan={6}>No transactions found.</td>
             </tr>

@@ -417,7 +417,7 @@ export default function CalendarPage({ isSidebarOpen }) {
 
       {/* Header */}
       <div className="calendar-header">
-        <h2>Scheduled Transactions</h2>
+        <h2>Scheduled transactions</h2>
         <div style={{ display:'flex', alignItems:'center', gap:'1rem', flexWrap:'wrap' }}>
           <div className="calendar-picker">
             {/* Вибір місяця */}

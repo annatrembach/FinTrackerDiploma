@@ -1,110 +1,287 @@
 .dashboard-container {
-    position: relative;
-    align-items: center;
-    padding: 10px;
-    background-color: #ffffff;
-    transition: transform 0.5s ease;
-    height: 100%;
-    width: 100%; 
-    display: flex;
-    justify-content: center;
-  }
-  
+  position: relative;
+  background-color: #ffffff;
+  transition: transform 0.5s ease;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px 10px;
+  box-sizing: border-box;
+}
+
+.dashboard-container.shifted {
+  transform: translateX(150px);
+}
+
+.dashboard-inner {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: max-width 0.5s ease;
+}
+
+/* Коли сайдбар відкритий — inner звужується */
+.dashboard-container.shifted .dashboard-inner {
+  max-width: 880px;
+}
+
+/* ── Summary cards ── */
+.dash-cards {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1 1 180px;
+  background: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
 .h3-dashboard {
-  font-size: 1.4rem !important;
-  margin: 20px 10px 20px 10px;
-  color: black !important;
+  font-size: 1rem !important;
+  margin: 0 0 8px 0;
+  color: #555 !important;
   font-weight: 600;
-
 }
 
-.h3-dashboard p {
+.card-value {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.card-value.balance  { color: #333; }
+.card-value.income   { color: #4caf82; }
+.card-value.expense  { color: #e96675; }
+
+/* ── Rows ── */
+.dash-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: stretch; /* однакова висота дітей */
+}
+
+/* ── Pie chart ── */
+.chart-round {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    flex: 0 0 300px;
+    min-width: 260px;
+    box-sizing: border-box;
+    padding: 30px 20px;
+}
+
+.chart-round h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.5rem !important;
+  color: #555;
+  font-weight: 600;
+}
+
+.canvas {
+  width: 220px !important;
+  height: 220px !important;
+}
+
+/* ── Line chart — та сама висота що й pie ── */
+.chart-line {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  flex: 1 1 300px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.chart-line h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.5rem !important;
+  color: #555;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* Canvas-обгортка займає весь залишок висоти */
+.chart-line-canvas-wrap {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+.chart-line-canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ── Generic panel ── */
+.dash-panel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  flex: 1 1 300px;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.dash-empty {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* ── Recent transactions table ── */
+.recent-tx {
+  flex: 1 1 380px;
+}
+
+.dash-tx-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.dash-tx-table thead tr {
+  border-bottom: 2px solid #f5b8bc;
+}
+
+.dash-tx-table th {
+  text-align: left;
+  padding: 6px 8px;
   color: #dd757e;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
-  .summary {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 40px;
-  }
-  
-  .cards {
-    width: 60% !important;
-    display: flex !important;
-    flex-wrap: nowrap !important;
-  }
 
-  .card {
-    background: white;
-    padding: 5px 30px 5px 30px;;
-    border-radius: 10px !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)  !important;
-    text-align: center;
-    flex: 1;
-    margin: 0 10px;
-  }
-  
-  .card p {
-    font-size: 2rem;
-    font-weight: bold;
-  }
-  
-  .charts {
-    width: 70% !important;
-  }
-  
-  .chart-round {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display:  grid;
-    text-align: center;
-    justify-content: center;
-    height: 333px;
-    width: 333px;
-  }
+.dash-tx-table tbody tr {
+  border-bottom: 1px solid #f9f0f0;
+  transition: background 0.15s;
+}
 
-  .chart-round h3 {
-    margin: 0px 0px 5px 0px; 
-    font-size: 1.2rem;
-    vertical-align: middle;
-  }
+.dash-tx-table tbody tr:last-child {
+  border-bottom: none;
+}
 
-  .canvas {
-    width: 230px !important;
-    height: 230px !important;
-  }
+.dash-tx-table tbody tr:hover {
+  background: #fff5f5;
+}
 
-  .chart-line {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width:100%;
-  }
+.dash-tx-table td {
+  padding: 7px 8px;
+  color: #444;
+}
 
-  .chart-line h3 {
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-  }
- 
-  .css-17fpwt7-MuiGrid-root{
-    width: 50%;
-    padding: 10px;
-  }
+.tx-date {
+  color: #aaa;
+  white-space: nowrap;
+  font-size: 0.78rem;
+}
 
-  .css-d64g0g-MuiGrid-root {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-  }
+.tx-desc {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #777;
+}
 
-  .dashboard-container.shifted {
-    transform: translateX(150px);
-    transition: transform 0.5s ease;
-  }
+.tx-amount {
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: right;
+}
 
+.tx-amount.income  { color: #4caf82; }
+.tx-amount.expense { color: #e96675; }
 
-  
+/* ── Goals panel ── */
+.goals-panel {
+  flex: 1 1 320px;
+}
+
+.goals-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.goal-stat {
+  flex: 1;
+  text-align: center;
+  background: #fff5f5;
+  border-radius: 10px;
+  padding: 10px 6px;
+}
+
+.goal-stat-num {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #dd757e;
+  line-height: 1;
+}
+
+.goal-stat-num.active    { color: #dd757e; }
+.goal-stat-num.completed { color: #4caf82; }
+
+.goal-stat-label {
+  display: block;
+  font-size: 0.72rem;
+  color: #aaa;
+  margin-top: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Overall progress bar ── */
+.overall-progress {
+  margin-bottom: 16px;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 10px;
+  background: #f5b8bc;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #dd757e;
+  border-radius: 99px;
+  transition: width 0.6s ease;
+  min-width: 4px;
+}
+
+/* ── Goals bar chart ── */
+.goals-chart-wrap {
+  width: 100%;
+}

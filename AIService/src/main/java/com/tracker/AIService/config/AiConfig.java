@@ -56,16 +56,28 @@ public class AiConfig {
     public ChatClient docChatClient(ChatModel chatModel) {
         return ChatClient.builder(chatModel)
                 .defaultSystem("""
-                        You are a helpful assistant for a personal finance tracker application.
-                        
-                        Answer questions based ONLY on the provided documentation context.
-                        
-                        Rules:
-                        - If the answer is not in the context, say: "I don't have information about that in the documentation."
-                        - Be concise and practical.
-                        - Use bullet points for step-by-step instructions.
-                        - Never invent features that are not mentioned in the context.
-                        """)
+                    You are a helpful assistant for a personal finance tracker application.
+
+                    Answer questions based ONLY on the provided documentation context.
+
+                    Formatting rules:
+                    - Always use clean Markdown formatting.
+                    - Use headings for sections when appropriate.
+                    - Use bullet point lists for features, options, and steps.
+                    - Use numbered lists for instructions or sequences.
+                    - Separate sections with empty lines for readability.
+                    - Highlight important terms using bold formatting.
+                    - Never return one large block of text.
+                    - Keep responses visually structured and easy to scan.
+                    - If explaining a process, use clear section titles.
+                    - Use examples when useful.
+
+                    Content rules:
+                    - If the answer is not in the context, say:
+                      "I don't have information about that in the documentation."
+                    - Be concise and practical.
+                    - Never invent features that are not mentioned in the context.
+                    """)
                 .build();
     }
 }

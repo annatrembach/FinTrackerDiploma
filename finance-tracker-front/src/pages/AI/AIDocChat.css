@@ -3,17 +3,11 @@
 }
 
 .doc-container {
-  width: 60%;
   max-width: 1000px;
-  min-width: 900px;
+  min-width: 0;          /* було 900px — фіксує ширину і заважає стисканню */
   margin: 0 auto;
   padding: 20px;
-  transition: transform 0.5s ease;
-  font-family: Arial, sans-serif;
-}
-
-.doc-container.shifted {
-  transform: translateX(150px);
+  transition: transform 0.5s ease, max-width 0.5s ease;
 }
 
 .doc-title {
@@ -21,17 +15,156 @@
   font-size: 30px;
   font-weight: bold;
   margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.markdown-content {
+  line-height: 1.65;
+  font-size: 0.96rem;
+  word-break: break-word;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4 {
+  color: #dd757e;
+  margin-top: 14px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.markdown-content p {
+  margin-bottom: 10px;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  padding-left: 22px;
+  margin: 10px 0;
+}
+
+.markdown-content li {
+  margin-bottom: 6px;
+}
+
+.markdown-content strong {
+  font-weight: 700;
+  color: #222;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid #dd757e;
+  padding-left: 12px;
+  margin: 12px 0;
+  color: #666;
+  background: #fff5f5;
+  border-radius: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.markdown-content code {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.markdown-content pre {
+  background: #222;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+/* --- Заголовки (зменшені) --- */
+.doc-title {
+  color: #dd757e;
+  font-size: 24px; /* Було 30px, зменшено */
+  font-weight: bold;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+/* Налаштування Markdown заголовків */
+.markdown-content h1 {
+  font-size: 22px; /* Було значно більше */
+  color: #dd757e;
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+.markdown-content h2 {
+  font-size: 19px; /* Було більше */
+  color: #dd757e;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+.markdown-content h3,
+.markdown-content h4 {
+  font-size: 17px;
+  color: #dd757e;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+/* --- Повідомлення (текст повернено рожевий) --- */
+.doc-message.user {
+  background: #dd757e;
+  color: #ffffff; /* Текст користувача залишаємо білим для контрасту */
+  align-self: flex-end;
+  font-weight: bold;
+}
+
+.doc-message.ai {
+  /* Ми використовуємо трохи темніший рожевий для тексту на світлому фоні,
+     щоб його можна було прочитати, не напружуючи очі. */
+  color: #b85c65; /* Темніший рожевий для читабельності */
+  background: #f7e8ea; /* Дуже світлий рожевий фон */
+  align-self: flex-start;
+  border: 1px solid #f0d0d4;
+}
+
+/* Виправляємо колір жирного тексту всередині повідомлень ШІ */
+.doc-message.ai .markdown-content strong {
+  color: #dd757e; /* Оригінальний рожевий для акцентів */
+  font-weight: 700;
+}
+
+/* Час повідомлення */
+.doc-message.ai .msg-time {
+  color: #a0a0a0; /* Сірий час для AI повідомлень */
+}
+
+/* --- Інпут зона --- */
+.doc-textarea {
+  flex: 1;
+  padding: 12px;
+  border-radius: 15px;
+  color: #b85c65; /* Текст введення також рожевий */
+  border: #dd757e solid 1px;
+  background: #fff;
 }
 
 .doc-box {
   height: 60vh;
   max-height: 600px;
+  width: 100%;
   overflow-y: auto;
   background: #e0f7f7;
   border-radius: 15px;
   padding: 20px;
   display: flex;
   flex-direction: column;
+}
+
+.doc-chat-area {
+  display: flex;
+  flex-direction: column;  /* замість flex-wrap: wrap */
+  align-items: flex-start; /* все зліва */
 }
 
 /* --- Повідомлення --- */

@@ -10,6 +10,11 @@ const UserProfile = ({ isSidebarOpen }) => {
   const { user, loading, error } = useSelector((state) => state.auth);
   const [summary, setSummary] = useState({ balance: 0 });
   const [transactions, setTransactions] = useState([]);
+  
+  // --- НОВИЙ СТАН ДЛЯ ПАГІНАЦІЇ ---
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const jwt = localStorage.getItem('jwt');
 
   useEffect(() => {
@@ -19,7 +24,6 @@ const UserProfile = ({ isSidebarOpen }) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!user || !user.id) return;
-
       try {
         const balanceRes = await axios.get(`http://localhost:8082/api/transactions/balance/${user.id}`, {
           headers: { Authorization: `Bearer ${jwt}` }
@@ -34,9 +38,22 @@ const UserProfile = ({ isSidebarOpen }) => {
         console.error('Error loading user data', err);
       }
     };
-
     fetchData();
   }, [user, jwt]);
+
+  // --- ЛОГІКА ПАГІНАЦІЇ ---
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentTransactions = transactions.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(transactions.length / itemsPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
 
   if (loading) return <div>Loading profile...</div>;
   if (error) return <div>Error loading profile: {error}</div>;
@@ -52,7 +69,6 @@ const UserProfile = ({ isSidebarOpen }) => {
             <p><strong>Email:</strong> {user.email}</p>
           </div>
         )}
-
         <div className="balance-text small-box">
           <span className="balance-label">Balance:</span><br/>
           <span className="balance-value">{summary.balance}$</span>
@@ -61,21 +77,45 @@ const UserProfile = ({ isSidebarOpen }) => {
 
       <div className="transaction-history">
         <h3 className="section-title">Transaction History</h3>
+        
         {transactions.length === 0 ? (
           <p>No transactions found.</p>
         ) : (
-          <ul className="transaction-list">
-            {transactions.map((tx) => (
-              <li key={tx.id} className={`transaction-item ${tx.type}`}>
-                <div className="left-group">
-                  <span className="symbol">{tx.type === 'INCOME' ? '+' : '-'}</span>
-                  <span className="amount">{tx.amount}$</span>
-                  <span className="category">{tx.category?.name || 'No category'}</span>
-                </div>
-                <span className="date">{dayjs(tx.date).format('DD.MM.YYYY')}</span>
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul className="transaction-list">
+              {currentTransactions.map((tx) => (
+                <li key={tx.id} className={`transaction-item ${tx.type}`}>
+                  <div className="left-group">
+                    <span className="symbol">{tx.type === 'INCOME' ? '+' : '-'}</span>
+                    <span className="amount">{tx.amount}$</span>
+                    <span className="category">{tx.category?.name || 'No category'}</span>
+                  </div>
+                  <span className="date">{dayjs(tx.date).format('DD.MM.YYYY')}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* --- КНОПКИ ПЕРЕМИКАННЯ --- */}
+            <div className="pagination-controls">
+              <button 
+                onClick={prevPage} 
+                disabled={currentPage === 1}
+                className="pagination-btn"
+              >
+                &larr; Previous
+              </button>
+              <span className="page-info">
+                Page <strong>{currentPage}</strong> of {totalPages}
+              </span>
+              <button 
+                onClick={nextPage} 
+                disabled={currentPage === totalPages}
+                className="pagination-btn"
+              >
+                Next &rarr;
+              </button>
+            </div>
+          </>
         )}
       </div>
     </div>
